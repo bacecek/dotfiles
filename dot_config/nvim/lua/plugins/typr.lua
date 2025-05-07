@@ -1,6 +1,6 @@
 return {
-    "nvzone/typr",
-    dependencies = { "nvzone/volt" },
-    cmd = { "Typr", "TyprStats" },
-    config = true,
+  "nvzone/typr",
+  dependencies = { "nvzone/volt" },
+  cmd = { "Typr", "TyprStats" },
+  config = true,
 }

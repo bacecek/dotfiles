@@ -1,5 +1,4 @@
 require("lazy").setup({
-  defaults = { lazy = true },
   checker  = { enabled = false },
 
   spec = {
@@ -8,10 +7,7 @@ require("lazy").setup({
 
     { import = "plugins.treesitter" },
 
-    { import = "plugins.mason" },
     { import = "plugins.lsp" },
-
-    { import = "plugins.completion" },
 
     { import = "plugins.typr" },
     { import = "plugins.tree" },

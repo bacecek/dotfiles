@@ -1,5 +1,6 @@
 local map = vim.keymap.set
 
-map("n", "<Leader>e", function()
-  vim.diagnostic.open_float(nil, { scope = "cursor" })
+map('n', '<Leader>e', function()
+  vim.diagnostic.open_float(nil, { scope = 'cursor' })
 end, { silent = true })
+map('n', '<leader>f', vim.lsp.buf.format, { desc = "Format document" })

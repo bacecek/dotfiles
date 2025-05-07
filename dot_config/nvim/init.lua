@@ -1,7 +1,6 @@
 -- Bootstrap lazy.nvim install and add to runtimepath
 require("bootstrap")
 
-
 -- General editor options
 require("options")
 
