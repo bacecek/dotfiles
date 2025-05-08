@@ -1,0 +1,33 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run the `open default settings` command
+// from the command palette or from `Zed` application menu.
+{
+  "features": {
+    "edit_prediction_provider": "supermaven"
+  },
+  "base_keymap": "VSCode",
+  "ui_font_size": 12,
+  "buffer_font_size": 12,
+  "buffer_font_family": "SF Mono",
+  "buffer_line_height": "standard",
+  "lsp": {
+    "rust-analyzer": {
+      "initialization_options": {
+        "checkOnSave": {
+          "command": "clippy"
+        }
+      }
+    }
+  },
+  "enable_language_server": true,
+  "autosave": {
+    "after_delay": {
+      "milliseconds": 500
+    }
+  }
+}
