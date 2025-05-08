@@ -1,0 +1,35 @@
+command_timeout = 20000
+follow_symlinks = false
+
+[character]
+disabled = true
+
+[package]
+disabled = true
+
+[kubernetes]
+disabled = true
+
+[python]
+disabled = true
+
+[gradle]
+disabled = true
+
+[java]
+disabled = true
+
+[golang]
+disabled = true
+
+[directory]
+truncate_to_repo = false
+truncation_length = 100
+
+[custom.arc]
+disabled = false
+command = "/Users/bacecek/work/junk/junk/bacecek/starship/arc_status.sh"
+when = 'arc rev-parse --is-inside-work-tree 2>/dev/null'
+
+[line_break]
+disabled = false
