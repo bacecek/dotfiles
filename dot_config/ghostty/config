@@ -1,2 +1,3 @@
 keybind = global:alt+1=toggle_visibility
-theme = catppuccin-frappe
+theme = GitHub-Dark-Dimmed
+font-family = "SF Mono"
