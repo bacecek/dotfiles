@@ -3,6 +3,8 @@ local opts = {
   shiftwidth = 4,
   tabstop = 4,
   softtabstop = 4,
+  shell = "/bin/zsh",
+  shellcmdflag = "-ic"
 }
 
 for k, v in pairs(opts) do
