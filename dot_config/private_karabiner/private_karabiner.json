@@ -1,0 +1,35 @@
+{
+    "profiles": [
+        {
+            "complex_modifications": {
+                "rules": [
+                    {
+                        "description": "fn -> ru",
+                        "manipulators": [
+                            {
+                                "from": { "key_code": "fn" },
+                                "to": [{ "key_code": "fn" }],
+                                "to_if_alone": [{ "select_input_source": { "language": "ru" } }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Capslock -> en",
+                        "manipulators": [
+                            {
+                                "from": { "key_code": "caps_lock" },
+                                "to": [{ "key_code": "caps_lock" }],
+                                "to_if_alone": [{ "select_input_source": { "language": "en" } }],
+                                "type": "basic"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "name": "Default profile",
+            "selected": true,
+            "virtual_hid_keyboard": { "keyboard_type_v2": "iso" }
+        }
+    ]
+}
