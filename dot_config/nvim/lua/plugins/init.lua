@@ -11,5 +11,6 @@ require("lazy").setup({
 
     { import = "plugins.typr" },
     { import = "plugins.tree" },
+    { import = "plugins.goose" },
   },
 })
