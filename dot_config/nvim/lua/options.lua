@@ -4,7 +4,9 @@ local opts = {
   tabstop = 4,
   softtabstop = 4,
   shell = "/bin/zsh",
-  shellcmdflag = "-ic"
+  shellcmdflag = "-ic",
+  relativenumber = true,
+  statuscolumn = "%s %l %r ",
 }
 
 for k, v in pairs(opts) do
@@ -28,4 +30,12 @@ local g = {
 
 for k, v in pairs(g) do
   vim.g[k] = v
+end
+
+local cmd = {
+  "colorscheme catppuccin-mocha"
+}
+
+for _, v in ipairs(cmd) do
+  vim.cmd(v)
 end
