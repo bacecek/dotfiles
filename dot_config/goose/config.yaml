@@ -1,0 +1,28 @@
+GOOSE_PROVIDER: openai
+OPENAI_BASE_PATH: v1/chat/completions
+GOOSE_MODE: auto
+OPENAI_HOST: https://api.openai.com
+ANTHROPIC_HOST: https://api.anthropic.com
+extensions:
+  computercontroller:
+    enabled: true
+    name: computercontroller
+    timeout: 300
+    type: builtin
+  developer:
+    enabled: true
+    name: developer
+    timeout: 300
+    type: builtin
+  jetbrains:
+    enabled: true
+    name: jetbrains
+    timeout: 300
+    type: builtin
+  memory:
+    enabled: true
+    name: memory
+    timeout: 300
+    type: builtin
+GOOSE_MODEL: gpt-4o
+OLLAMA_HOST: localhost
