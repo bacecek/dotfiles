@@ -1,0 +1,269 @@
+export ZSH=/Users/bacecek/.oh-my-zsh
+
+ZSH_THEME="simple"
+
+plugins=(
+  git
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+)
+
+source $ZSH/oh-my-zsh.sh
+
+
+#VARIABLES
+# export JAVA_HOME=$(/usr/libexec/java_home -v11)
+# export JAVA_HOME=$(/usr/libexec/java_home -v17)
+export JAVA_HOME=$(/usr/libexec/java_home -v21)
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export ANDROID_SDK_ROOT="/Users/bacecek/Library/Android/sdk"
+export LD_LIBRARY_PATH=$ANDROID_HOME/tools/lib64
+export CARGO_HOME="$HOME/.cargo/bin"
+#Disable audio on emulator
+export QEMU_AUDIO_DRV=none
+export HISTSIZE=10000000
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export HOMEBREW_NO_ENV_HINTS=true
+export EDITOR=nvim
+
+#PATH
+PATH=$PATH:$ANDROID_HOME/tools/bin
+PATH=$PATH:$JAVA_HOME:$JAVA_HOME/bin
+PATH=$PATH:$ANDROID_HOME/tools
+PATH=$PATH:$ANDROID_HOME/platform-tools
+PATH=$PATH:$CARGO_HOME
+PATH="${HOME}/.local/bin:$PATH"
+PATH=$HOME/bin:$PATH
+PATH="/usr/local/sbin:$PATH"
+PATH=$PATH:$ANDROID_HOME/platform-tools/systrace
+PATH=$PATH:$HOME/.cargo/bin/bin
+PATH=/usr/local/bin:$PATH
+PATH=/opt/homebrew/bin:$PATH
+PATH=$(pyenv root)/shims:$PATH
+PATH=$PATH:~/Library/Application\ Support/JetBrains/Toolbox/scripts
+
+#ALIASES
+alias gcd='git checkout'
+alias gch='git cherry-pick'
+alias gg='git gui'
+alias gp="git push origin HEAD"
+alias gpf="git push -f origin HEAD"
+alias gpl="git pull"
+alias gplo="git pull origin"
+alias gc='git commit'
+alias gcs='git commit -S'
+alias gs='git status'
+alias gm='git merge --no-ff'
+alias ga='git add'
+alias gb='git branch'
+alias cb="git branch | grep '*'"
+alias gr='git rebase'
+alias gri='git rebase -i'
+alias grs='git reset'
+alias grsh='grs --hard'
+alias gf='git fetch'
+alias gfo='git fetch origin'
+alias gsu='git submodule update --recursive'
+alias gcdf="git clean -df"
+alias arestart="adb kill-server && adb start-server" # Restart ADB
+alias nmrestart="sudo /etc/init.d/network-manager restart" # Restart Network Manager
+alias ai="adb install"
+alias air="adb install -r"
+alias gw="./gradlew"
+alias gws="gw --stop"
+alias proguardgui="$ANDROID_HOME/tools/proguard/bin/proguardgui.sh"
+alias sda="adb shell am set-debug-app --persistent"
+alias sdaw="adb shell am set-debug-app --persistent -w"
+alias cda="adb shell am clear-debug-app"
+alias acl="adb shell pm clear"
+alias ash="adb shell"
+alias sublzsh="subl $HOME/.zshrc"
+alias ascr='adb exec-out screencap -p > '
+
+alias cd="z"
+alias ls="eza"
+alias ll="eza -alh"
+alias tree="eza --tree"
+alias cat="bat -p"
+alias chez="chezmoi"
+
+#Favorite dirs
+alias cddown="cd ~/Downloads"
+
+# взять коммит и засквошить его с текущим
+gchn() {
+    if [[ $# -ne 1 ]]; then
+        echo "Wrong arguments."
+        return
+    fi
+    git cherry-pick $1 --no-commit && git commit --amend -C HEAD
+}
+
+# ребейз без чекаута
+gmr() {
+    if [[ $# -ne 2 ]]; then
+        echo "Wrong arguments."
+        return
+    fi
+    git format-patch --full-index --binary --stdout $1..$2 | git am -3
+}
+
+# перенос коммитов между копиями бро (пути надо поменять)
+gdch() {
+    if [[ $# -ne 2 ]]; then
+        echo "Wrong arguments."
+        return
+    fi
+    git -C "/home/myrth/git/$1" format-patch --full-index --binary --stdout -1 $2 | git am -3
+}
+
+gfd() {
+    if [[ $# -ne 1 ]]; then
+        echo "Wrong arguments."
+        return
+    fi
+    git branch -D $1
+    git fetch origin $1 && git checkout $1
+}
+
+: '
+can create/checkout or delete branch with given ticket number.
+
+params:
+-n - ticker number. required
+-p - branch number. default is 0.
+-d - delete branch
+-q - queue
+
+example:
+br -n 33333 - create branch wp/ABRO-33333/0
+br -n 33333 -p 1 - create branch wp/ABRO-33333/1
+br -n 33333 -d - delete branch wp/ABRO-33333/0
+'
+br() {
+    local BRANCH_NUM="0"
+    local NEED_TO_DELETE=false
+    local TICKET_NUM=""
+    local QUEUE="ABRO"
+
+    while [ -n "$1" ]
+    do
+        case "$1" in
+            -n) TICKET_NUM="$2"
+            shift;;
+
+            -p) BRANCH_NUM="$2"
+            shift;;
+
+            -q) QUEUE="$2"
+            shift;;
+
+            -d) NEED_TO_DELETE=true;;
+
+            --) shift
+            break;;
+
+            *) echo "$1 is unsupported parameter";;
+        esac
+        shift
+    done
+
+    if [[ ! $TICKET_NUM =~ ^[0-9]+$ ]]; then
+        echo "Wrong ticket number: $TICKET_NUM"
+        return
+    fi
+
+    BRANCH_NAME="wp/$QUEUE-$TICKET_NUM"/$BRANCH_NUM
+
+    if [ "$NEED_TO_DELETE" = true ]; then
+        COMMAND="git branch -D $BRANCH_NAME"
+    else
+        COMMAND="git checkout $BRANCH_NAME >/dev/null || git checkout -b $BRANCH_NAME"
+    fi
+
+    echo "Branch number: $BRANCH_NUM"
+    echo "Ticket number: $TICKET_NUM"
+    echo "Need to delete: $NEED_TO_DELETE"
+    echo "Branch name: $BRANCH_NAME"
+
+    echo "Running the command: $COMMAND"
+    bash -c "$COMMAND"
+}
+
+rbfrm() {
+    CURRENT_BRANCH="$(git symbolic-ref --short HEAD)"
+    if [ -z $CURRENT_BRANCH ]; then
+        echo $CURRENT_BRANCH
+        return
+    fi
+
+    if [ $CURRENT_BRANCH != "master" ]; then
+        echo "Checkouting to master..."
+        master
+    fi
+
+    echo "Fetch origin master..."
+
+    git pull origin master
+
+    if [ $CURRENT_BRANCH = "master" ]; then
+        return
+    fi
+
+    git checkout $CURRENT_BRANCH
+    echo "Rebasing to origin master..."
+    git rebase origin/master
+}
+
+adbandis() {
+    adb shell settings put global window_animation_scale 0.0
+    adb shell settings put global transition_animation_scale 0.0
+    adb shell settings put global animator_duration_scale 0.0
+    adb shell settings put secure immersive_mode_confirmations confirmed
+}
+
+adbanen() {
+    adb shell settings put global window_animation_scale 1.0
+    adb shell settings put global transition_animation_scale 1.0
+    adb shell settings put global animator_duration_scale 1.0
+}
+
+adbspeed() {
+    echo "Checking connected Android device USB Speeds"
+    echo ""
+
+    adb devices | while read line
+    do
+        if [ ! "$line" = "" ] && [ `echo $line | awk '{print $2}'` = "device" ]
+        then
+            device=`echo $line | awk '{print $1}'`
+            
+            system_profiler SPUSBDataType 2> /dev/null \
+                | awk '
+                    /Serial Number:/{p=$3}
+                    /Speed:/{x=$4$5}
+                    /Location ID:/{sub(/.*: /,""); printf("[%s] connected with speed up to: %s\n", p, x);}
+                ' | while read line2
+            do 
+                if [[ ( ${line2} ==  "[${device}"* ) ]]; then
+                    device_model=$(adb -s "${device}" shell getprop ro.product.model)
+                    echo ${device_model} ${line2}
+                fi
+            done
+
+        fi
+    done
+
+    echo ""
+}
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+eval "$(zoxide init zsh)"
+eval "$(direnv hook zsh)"
+
+PROMPT="${PROMPT}"$'\n'
+
+export NVM_DIR="$HOME/.nvm"
+  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
