@@ -23,6 +23,11 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+vim.api.nvim_create_autocmd("TermOpen", {
+  pattern = "*",
+  command = "startinsert",
+})
+
 local g = {
   loaded_netrw = 1,
   loaded_netrwPlugin = 1,
