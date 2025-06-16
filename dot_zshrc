@@ -272,3 +272,6 @@ if [ -f ~/.zshrc_local ]; then
     source ~/.zshrc_local
 fi
 
+# Overide path to node bin
+PATH=/opt/homebrew/bin:$PATH
+
