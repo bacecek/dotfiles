@@ -1,4 +1,7 @@
 {
+    "global": {
+        "enable_notification_window": false
+    },
     "profiles": [
         {
             "complex_modifications": {
@@ -7,9 +10,21 @@
                         "description": "fn -> ru",
                         "manipulators": [
                             {
-                                "from": { "key_code": "fn" },
-                                "to": [{ "key_code": "fn" }],
-                                "to_if_alone": [{ "select_input_source": { "language": "ru" } }],
+                                "from": {
+                                    "key_code": "fn"
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "fn"
+                                    }
+                                ],
+                                "to_if_alone": [
+                                    {
+                                        "select_input_source": {
+                                            "language": "ru"
+                                        }
+                                    }
+                                ],
                                 "type": "basic"
                             }
                         ]
@@ -18,18 +33,64 @@
                         "description": "Capslock -> en",
                         "manipulators": [
                             {
-                                "from": { "key_code": "caps_lock" },
-                                "to": [{ "key_code": "caps_lock" }],
-                                "to_if_alone": [{ "select_input_source": { "language": "en" } }],
+                                "from": {
+                                    "key_code": "caps_lock"
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "caps_lock"
+                                    }
+                                ],
+                                "to_if_alone": [
+                                    {
+                                        "select_input_source": {
+                                            "language": "en"
+                                        }
+                                    }
+                                ],
                                 "type": "basic"
                             }
                         ]
                     }
                 ]
             },
+            "devices": [
+                {
+                    "identifiers": {
+                        "is_keyboard": true
+                    },
+                    "simple_modifications": [
+                        {
+                            "from": {
+                                "key_code": "non_us_backslash"
+                            },
+                            "to": [
+                                {
+                                    "key_code": "grave_accent_and_tilde"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
             "name": "Default profile",
             "selected": true,
-            "virtual_hid_keyboard": { "keyboard_type_v2": "iso" }
+            "simple_modifications": [
+                {
+                    "from": {
+                        "key_code": "grave_accent_and_tilde"
+                    },
+                    "to": [
+                        {
+                            "key_code": "non_us_backslash"
+                        }
+                    ]
+                }
+            ],
+            "virtual_hid_keyboard": {
+                "indicate_sticky_modifier_keys_state": false,
+                "keyboard_type_v2": "iso"
+            }
         }
     ]
 }
