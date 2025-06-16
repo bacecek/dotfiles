@@ -1,6 +1,10 @@
 export ZSH=/Users/bacecek/.oh-my-zsh
 
-ZSH_THEME="simple"
+if [ -f ~/.zshrc_local ]; then
+    source ~/.zshrc_local
+fi
+
+ZSH_THEME=${ZSH_THEME:-"simple"}
 
 plugins=(
   git
@@ -267,3 +271,5 @@ PROMPT="${PROMPT}"$'\n'
 export NVM_DIR="$HOME/.nvm"
   [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
   [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+
