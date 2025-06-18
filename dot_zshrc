@@ -8,11 +8,11 @@ plugins=(
   zsh-syntax-highlighting
 )
 
-source $ZSH/oh-my-zsh.sh
-
 if [ -f ~/.zshrc_local ]; then
     source ~/.zshrc_local
 fi
+
+source $ZSH/oh-my-zsh.sh
 
 #VARIABLES
 if [[ "$(uname)" == "Darwin" ]]; then
