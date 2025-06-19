@@ -1,7 +1,7 @@
 require("lazy").setup({
-  checker  = { enabled = false },
+  checker = { enabled = false },
 
-  spec = {
+  spec    = {
 
     { import = "plugins.colorscheme" },
 
@@ -13,5 +13,6 @@ require("lazy").setup({
     { import = "plugins.tree" },
     { import = "plugins.goose" },
     { import = "plugins.misc" },
+    -- { import = "plugins.persistence" },
   },
 })
