@@ -25,24 +25,24 @@ return {
     },
     config = function()
       local lspconfig = require("lspconfig")
-      lspconfig.lua_ls.setup {
+      -- Configure the Lua language server to recognize Neovim globals and runtime
+      local runtime_path = vim.split(package.path, ";")
+      table.insert(runtime_path, "lua/?.lua")
+      table.insert(runtime_path, "lua/?/init.lua")
+      -- Common settings for Lua language servers
+      local lua_settings = {
         settings = {
           Lua = {
             runtime = {
-              version = 'LuaJIT',
+              version = "LuaJIT",
+              path = runtime_path,
             },
             diagnostics = {
-              globals = { 'vim' },
+              -- Recognize the `vim` global variable
+              globals = { "vim" },
             },
             workspace = {
-              library = {
-                vim.api.nvim_get_runtime_file("", true),
-                vim.fn.expand "$VIMRUNTIME/lua",
-                vim.fn.expand "$VIMRUNTIME/lua/vim/lsp",
-                vim.fn.stdpath "data" .. "/lazy/ui/nvchad_types",
-                vim.fn.stdpath "data" .. "/lazy/lazy.nvim/lua/lazy",
-                "${3rd}/luv/library",
-              },
+              library = vim.api.nvim_get_runtime_file("", true),
               checkThirdParty = false,
             },
             telemetry = {
@@ -58,7 +58,6 @@ return {
           },
         },
         on_attach = function(client, bufnr)
-          -- Enable formatting
           if client.supports_method("textDocument/formatting") then
             vim.api.nvim_create_autocmd("BufWritePre", {
               buffer = bufnr,
@@ -69,6 +68,8 @@ return {
           end
         end,
       }
+      -- Setup Lua language server
+      lspconfig.lua_ls.setup(lua_settings)
     end,
   },
   {

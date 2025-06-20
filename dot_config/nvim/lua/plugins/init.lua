@@ -13,6 +13,7 @@ require("lazy").setup({
     { import = "plugins.tree" },
     { import = "plugins.goose" },
     { import = "plugins.misc" },
+    { import = "plugins.codex" },
     -- { import = "plugins.persistence" },
   },
 })
