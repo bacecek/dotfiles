@@ -21,7 +21,6 @@ if [[ "$(uname)" == "Darwin" ]]; then
   # export JAVA_HOME=$(/usr/libexec/java_home -v17)
   # export JAVA_HOME=$(/usr/libexec/java_home -v21)
   export JAVA_HOME=$(/usr/libexec/java_home -v23)
-  PATH=/opt/homebrew/bin:$PATH
   export HOMEBREW_NO_ENV_HINTS=true
   PATH=$PATH:~/Library/Application\ Support/JetBrains/Toolbox/scripts
   export ANDROID_HOME=$HOME/Library/Android/sdk
@@ -48,7 +47,7 @@ PATH="/usr/local/sbin:$PATH"
 PATH=$PATH:$ANDROID_HOME/platform-tools/systrace
 PATH=$PATH:$HOME/.cargo/bin/bin
 PATH=/usr/local/bin:$PATH
-PATH=$(pyenv root)/shims:$PATH
+PATH=$PATH:$(pyenv root)/shims
 
 #ALIASES
 alias gcd='git checkout'
@@ -134,70 +133,6 @@ gfd() {
     git fetch origin $1 && git checkout $1
 }
 
-: '
-can create/checkout or delete branch with given ticket number.
-
-params:
--n - ticker number. required
--p - branch number. default is 0.
--d - delete branch
--q - queue
-
-example:
-br -n 33333 - create branch wp/ABRO-33333/0
-br -n 33333 -p 1 - create branch wp/ABRO-33333/1
-br -n 33333 -d - delete branch wp/ABRO-33333/0
-'
-br() {
-    local BRANCH_NUM="0"
-    local NEED_TO_DELETE=false
-    local TICKET_NUM=""
-    local QUEUE="ABRO"
-
-    while [ -n "$1" ]
-    do
-        case "$1" in
-            -n) TICKET_NUM="$2"
-            shift;;
-
-            -p) BRANCH_NUM="$2"
-            shift;;
-
-            -q) QUEUE="$2"
-            shift;;
-
-            -d) NEED_TO_DELETE=true;;
-
-            --) shift
-            break;;
-
-            *) echo "$1 is unsupported parameter";;
-        esac
-        shift
-    done
-
-    if [[ ! $TICKET_NUM =~ ^[0-9]+$ ]]; then
-        echo "Wrong ticket number: $TICKET_NUM"
-        return
-    fi
-
-    BRANCH_NAME="wp/$QUEUE-$TICKET_NUM"/$BRANCH_NUM
-
-    if [ "$NEED_TO_DELETE" = true ]; then
-        COMMAND="git branch -D $BRANCH_NAME"
-    else
-        COMMAND="git checkout $BRANCH_NAME >/dev/null || git checkout -b $BRANCH_NAME"
-    fi
-
-    echo "Branch number: $BRANCH_NUM"
-    echo "Ticket number: $TICKET_NUM"
-    echo "Need to delete: $NEED_TO_DELETE"
-    echo "Branch name: $BRANCH_NAME"
-
-    echo "Running the command: $COMMAND"
-    bash -c "$COMMAND"
-}
-
 rbfrm() {
     CURRENT_BRANCH="$(git symbolic-ref --short HEAD)"
     if [ -z $CURRENT_BRANCH ]; then
@@ -277,9 +212,6 @@ PROMPT="${PROMPT}"$'\n'
 export NVM_DIR="$HOME/.nvm"
   [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
   [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
-
-# Overide path to node bin
-PATH=/opt/homebrew/bin:$PATH
 
 rename_tmux_window_to_cwd() {
   [ -n "$TMUX" ] && tmux rename-window "${USER}@${HOSTNAME}:$(basename "$PWD")"
